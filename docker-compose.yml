@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  izocrete-chatbot:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./chroma_db:/app/chroma_db
+      - ./izocrete_qa_pairs.json:/app/izocrete_qa_pairs.json
+      - ./izocrete_qa_pairs_2.json:/app/izocrete_qa_pairs_2.json
+    depends_on:
+      - chroma
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  chroma:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_HTTP_PORT=8000
+    restart: unless-stopped
+
+volumes:
+  chroma_data: 

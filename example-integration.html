@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izocrete Website - Chatbot Integration Example</title>
+    <link rel="stylesheet" href="chatbot-styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .main-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .chatbot-container {
+            position: sticky;
+            top: 20px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot-container {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Welcome to Izocrete</h1>
+            <p>Next-generation building materials for sustainable construction</p>
+        </div>
+        
+        <div class="content">
+            <div class="main-content">
+                <h2>About Izocrete</h2>
+                <p>Izocrete is a revolutionary building material that combines the strength of concrete with the low density of polystyrene, creating a lightweight, highly insulating, and fire-resistant material.</p>
+                
+                <h3>Key Benefits</h3>
+                <ul>
+                    <li><strong>Superior Insulation:</strong> Eight times better than red bricks</li>
+                    <li><strong>Energy Efficiency:</strong> Reduces heating and cooling costs by up to 70%</li>
+                    <li><strong>Lightweight:</strong> Half the weight of traditional materials</li>
+                    <li><strong>Fire Resistant:</strong> Non-combustible for enhanced safety</li>
+                    <li><strong>Easy Installation:</strong> Large blocks reduce labor and material use</li>
+                </ul>
+                
+                <h3>Applications</h3>
+                <p>Izocrete blocks are ideal for residential, commercial, and industrial buildings. They're perfect for walls, partitions, floors, roofs, and façade cladding.</p>
+                
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>Thermal Performance</h3>
+                        <p>Thermal conductivity of 0.06 W/m·K means exceptional energy efficiency and comfort.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Cost Effective</h3>
+                        <p>Long-term savings through reduced energy costs and faster construction times.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Environmentally Friendly</h3>
+                        <p>Supports sustainable construction practices and reduces carbon footprint.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-container">
+                <div id="chatbot-widget"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the chatbot client -->
+    <script src="chatbot-client.js"></script>
+    
+    <script>
+        // Initialize the chatbot when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Replace with your actual API URL after deployment
+            const API_URL = 'https://your-izocrete-chatbot.railway.app';
+            
+            // Create the chatbot UI
+            const chatbotUI = new IzocreteChatbotUI(API_URL, 'chatbot-widget', {
+                showTypingIndicator: true,
+                autoScroll: true
+            });
+            
+            // Add a welcome message
+            setTimeout(() => {
+                const messagesContainer = document.getElementById('chat-messages');
+                if (messagesContainer) {
+                    const welcomeDiv = document.createElement('div');
+                    welcomeDiv.className = 'message bot-message';
+                    welcomeDiv.innerHTML = `
+                        <div class="message-content">
+                            👋 Hello! I'm your Izocrete AI assistant. Ask me anything about our products, technical specifications, installation, or benefits!
+                        </div>
+                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                    `;
+                    messagesContainer.appendChild(welcomeDiv);
+                }
+            }, 1000);
+            
+            // Example: Test the API connection
+            chatbotUI.chatbot.healthCheck().then(health => {
+                console.log('Chatbot API health:', health);
+            }).catch(error => {
+                console.error('Chatbot API health check failed:', error);
+            });
+        });
+        
+        // Example: Floating chat widget (uncomment to use)
+        /*
+        document.addEventListener('DOMContentLoaded', function() {
+            const API_URL = 'https://your-izocrete-chatbot.railway.app';
+            
+            // Create floating widget
+            const floatingWidget = document.createElement('div');
+            floatingWidget.id = 'floating-chatbot';
+            floatingWidget.className = 'izocrete-chatbot floating';
+            document.body.appendChild(floatingWidget);
+            
+            const chatbotUI = new IzocreteChatbotUI(API_URL, 'floating-chatbot', {
+                showTypingIndicator: true,
+                autoScroll: true
+            });
+        });
+        */
+    </script>
+</body>
+</html> 
