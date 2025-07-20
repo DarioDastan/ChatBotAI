@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- 
+Izocrete Chatbot Integration Code
+Copy this code and add it to your website before the closing </body> tag
+-->
+
+<!-- Step 1: Upload izocrete-chatbot-widget.js to your website's public folder -->
+<!-- Step 2: Add this code to your website's HTML -->
+
+<!-- Chatbot Integration -->
+<script src="https://izoweb-seven.vercel.app/izocrete-chatbot-widget.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Replace this URL with your deployed API URL from Render
+        const API_URL = 'https://your-izocrete-chatbot.onrender.com';
+        
+        // Initialize the chatbot widget
+        initIzocreteChatbot(API_URL, {
+            position: 'bottom-right', // bottom-right, bottom-left, top-right, top-left
+            theme: 'light', // light, dark
+            primaryColor: '#667eea',
+            accentColor: '#764ba2',
+            showOnLoad: false, // Set to true to show chat automatically
+            welcomeMessage: '👋 Hello! I\'m your Izocrete AI assistant. Ask me anything about our products, technical specifications, installation, or benefits!'
+        });
+        
+        // Optional: Test API connection
+        fetch(`${API_URL}/health`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Chatbot API is healthy:', data);
+            })
+            .catch(error => {
+                console.error('Chatbot API health check failed:', error);
+            });
+    });
+    
+    // Optional: Function to show notification badge
+    function showChatNotification() {
+        if (window.showChatNotification) {
+            window.showChatNotification();
+        }
+    }
+</script>
+
+<!-- 
+INSTRUCTIONS:
+1. Upload izocrete-chatbot-widget.js to your website's public folder
+2. Replace 'https://your-izocrete-chatbot.onrender.com' with your actual API URL
+3. Customize colors, position, and welcome message as needed
+4. Test the integration on your website
+
+FEATURES:
+- Floating chat widget in bottom-right corner
+- Responsive design for mobile and desktop
+- Customizable colors and position
+- Professional appearance
+- Easy to integrate
+--> 
